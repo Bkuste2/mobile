@@ -1,0 +1,21 @@
+{
+  "Create Functional Component File Setup": {
+    "scope": "javascript, typescript, typescriptreact",
+    "prefix": "ncff",
+    "body": [
+      "import { View, Text } from 'react-native'",
+      "",
+      "type ${1:${TM_FILENAME_BASE}}Props {}",
+      "",
+      "export function ${1:${TM_FILENAME_BASE}}({}: ${1:${TM_FILENAME_BASE}}Props) {",
+      "  ",
+      "  return (",
+      "    <View>",
+      "      <Text>$1</Text>",
+      "    </View>",
+      "  )",
+      "}"
+    ],
+    "description": "Snippet to initial setup to functional component file"
+  }
+}

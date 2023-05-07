@@ -1,0 +1,14 @@
+{
+	"Create Style File Setup": {
+		"scope": "javascript,typescript, typescriptreact",
+		"prefix": "nsf",
+		"body": [
+			"import styled from \"styled-components/native\";",
+			"",
+			"export const Container = styled.View`",
+			"  $1",
+			"`"
+		],
+		"description": "Snippet to initial setup to style file using styled component"
+	}
+}
