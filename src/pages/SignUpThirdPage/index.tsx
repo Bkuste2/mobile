@@ -4,19 +4,18 @@ import {
   Keyboard,
 } from "react-native";
 
-import { Container, PrincipalImage, Title } from "./styles";
-import { SignUpForm } from "../../components/Form";
+import { Container, InsideContainer, Title } from "./styles";
+import { ThirdSignUpForm } from "../../components/Form";
 
-export function SignUp() {
+export function SignUpThirdPage() {
   return (
     <Container>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView behavior="position" enabled>
-            <Title>Faça seu Cadastro!</Title>
-            <PrincipalImage
-              source={require("../../assets/signUp/firstImg.png")}
-            />
-            <SignUpForm />
+          <InsideContainer>
+            <Title>Falta Pouco!</Title>
+            <ThirdSignUpForm />
+          </InsideContainer>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </Container>

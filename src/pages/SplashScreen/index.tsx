@@ -1,9 +1,7 @@
 import Lottie from "lottie-react-native";
-
-import Animation from "../../assets/animations/splash-screen.json";
 import { Container } from "./styles";
-import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Animation from "../../assets/animations/splash-screen.json";
 
 export function SplashScreen() {
   const navigation = useNavigation();
@@ -11,7 +9,7 @@ export function SplashScreen() {
     navigation.navigate(route);
   }
 
-  setTimeout(() => handleNavigate('signUp'), 2000);
+  setTimeout(() => handleNavigate('signUpThirdPage'), 2000);
 
   return (
     <Container>

@@ -1,10 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { MainRoutes } from "./routes";
-import { View } from "react-native";
+import { UserProvider } from "../contexts/userContext";
 export function Routes() {
   return (
     <NavigationContainer>
-      <MainRoutes />
+      <UserProvider>
+        <MainRoutes />
+      </UserProvider>
     </NavigationContainer>
   );
 }

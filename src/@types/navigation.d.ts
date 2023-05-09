@@ -2,7 +2,9 @@ export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       splashScreen: undefined;
-      signUp: undefined;
+      signUpFirstPage: undefined;
+      signUpSecondPage: undefined;
+      signUpThirdPage: undefined;
     }
   }
 }
