@@ -5,6 +5,8 @@ interface UserData {
   username?: string,
   city?: string,
   email?: string,
+  avatar?: string,
+  description?: string,
   password?: string,
   games?: string[],
 }

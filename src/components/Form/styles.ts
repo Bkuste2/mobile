@@ -16,7 +16,14 @@ export const Form = styled.View`
   margin: auto;
 `;
 
-export const UploadImageDiv = styled.TouchableOpacity`
+export const UploadImagePressed = styled.TouchableOpacity`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const UploadImageDiv = styled.View`
   width: 90%;
   height: 200px;
   display: flex;
@@ -33,6 +40,19 @@ export const UploadImage = styled.View`
   align-items: center;
   justify-content: center;
   gap: 16px;
+`
+
+export const ImageUploaded = styled.View`
+  width: 150px;
+  height: 150px;
+  padding: 5px ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px;
+  border-color: ${Colors.primary};
+  border-radius: 100%;
+  margin-bottom: 10px;
 `
 
 export const UploadImageText = styled.Text`

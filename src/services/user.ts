@@ -14,12 +14,16 @@ export async function GetUsers() {
   console.log(user);
 }
 
-export async function CreateUser(userDTO: User) {  
-  let userCriation = await fetch(`${baseUrl}/users`, {
-    method: 'post', headers, body: JSON.stringify(userDTO, null, 2)
+export async function CreateUser(userDTO: User) {
+  fetch(`${baseUrl}/users`, {
+    method: 'post',
+    body: JSON.stringify(userDTO, null, 2),
+    headers: ({ 'Content-Type': 'application/json' }),
   })
-    .then(res => res.json())
+    .then(user => user.json())
+    .then(user => console.log(user))
 
-  const { setIsAuthenticated } = useContext(UserContext)
-  setIsAuthenticated(true)
+  // const { setIsAuthenticated } = useContext(UserContext)
+  // setIsAuthenticated(true)
+  console.log('está autenticado');
 }

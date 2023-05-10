@@ -1,19 +1,23 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Alert, Image, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import * as ImagePicker from 'expo-image-picker'
 
 // Components
-import { Form, InputField, TextButton, ErrorText, UploadImageDiv, UploadImage, UploadImageText } from "./styles";
+import { Form, InputField, TextButton, ErrorText, UploadImageDiv, UploadImage, UploadImageText, UploadImagePressed, ImageUploaded } from "./styles";
 import { ControlledInput } from "../../components/ControlledInput";
 import { Button } from "./styles";
 import { UserContext } from "../../contexts/userContext";
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+
 import { CreateUser } from "../../services/user";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { Colors } from "../../patterns/theme";
+import { uploadPhoto } from "../../services/uploadPhoto";
 
 export function FirstSignUpForm() {
   const { setUser } = useContext(UserContext)
@@ -102,7 +106,7 @@ export function FirstSignUpForm() {
 }
 
 export function SecondSignUpForm() {
-  const { setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
 
   const navigator = useNavigation()
 
@@ -133,7 +137,7 @@ export function SecondSignUpForm() {
   });
 
   function onSubmit({ city, email }: createUserFormDTO) {
-    setUser({ city, email })
+    setUser({ ...user, city, email })
     handleNavigate('signUpThirdPage')
   };
 
@@ -178,6 +182,8 @@ export function SecondSignUpForm() {
 
 export function ThirdSignUpForm() {
   const { user, setUser } = useContext(UserContext)
+  const [avatarUrl, setAvatarUrl] = useState<string>('')
+
 
   const createUserFormSchema = z.object({
     description: z
@@ -198,32 +204,87 @@ export function ThirdSignUpForm() {
 
   type createUserFormDTO = z.infer<typeof createUserFormSchema>;
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<createUserFormDTO>({
+  const { control, handleSubmit, formState: { errors }, } = useForm<createUserFormDTO>({
     resolver: zodResolver(createUserFormSchema),
   });
 
   function onSubmit({ description, password }: createUserFormDTO) {
-    setUser({ password })
+    setUser({ ...user, description, password, avatar: avatarUrl })
     CreateUser({ ...user, description, password })
   };
 
+  function formatImageForUpload(image) {
+    const uri = image.uri;
+    const name = uri.split('/').pop();
+    const type = `image/${name.split('.').pop()}`;
+    return {
+      uri,
+      name,
+      type,
+    };
+  }
+
+
+  const handlePickerImage = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+      Alert.alert(
+        'Permissão necessária',
+        'Permita que sua aplicação acesse as imagens'
+      );
+    } else {
+      const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        base64: false,
+        aspect: [4, 4],
+        quality: 1,
+      });
+
+      if (!canceled) {
+        const blobfile = await (await fetch(`file://${assets[0].uri}`)).blob()
+
+        await uploadPhoto({ file: formatImageForUpload(assets[0]), blob: blobfile })
+          .then((downloadURL) => {
+            setAvatarUrl(downloadURL)
+            console.log(avatarUrl);
+
+          })
+          .catch((error) => {
+            console.error(`Erro no upload: ${error}`);
+          });
+
+      }
+    }
+  };
   return (
     <Form>
 
-      <UploadImageDiv>
-        <UploadImage>
-          <Feather
-            name={"upload"}
-            size={60}
-            color={Colors.primary}
-          />
-          <UploadImageText>Faça Upload do seu Avatar</UploadImageText>
-        </UploadImage>
-      </UploadImageDiv>
+      <UploadImagePressed onPress={handlePickerImage}>
+        {avatarUrl
+          ? (
+            <>
+              <ImageUploaded>
+                <Image source={{ uri: avatarUrl }} style={{ width: '100%', height: '100%', borderRadius: 100 }} />
+              </ImageUploaded>
+              <Text style={{ fontSize: 20, color: Colors.primary, fontWeight: "bold" }}>{user.name}</Text>
+            </>
+          )
+          : (
+            <UploadImageDiv>
+              <UploadImage>
+                <Feather
+                  name={"upload"}
+                  size={60}
+                  color={Colors.primary}
+                />
+                <UploadImageText>Faça Upload do seu Avatar</UploadImageText>
+              </UploadImage>
+            </UploadImageDiv>
+          )
+        }
+      </UploadImagePressed>
+
 
       <InputField>
         <ControlledInput
@@ -276,3 +337,4 @@ export function ThirdSignUpForm() {
     </Form>
   );
 }
+

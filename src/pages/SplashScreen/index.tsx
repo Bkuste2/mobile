@@ -9,7 +9,7 @@ export function SplashScreen() {
     navigation.navigate(route);
   }
 
-  setTimeout(() => handleNavigate('signUpThirdPage'), 2000);
+  setTimeout(() => handleNavigate('signUpFirstPage'), 2000);
 
   return (
     <Container>
